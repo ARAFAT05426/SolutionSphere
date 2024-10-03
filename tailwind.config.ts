@@ -8,9 +8,26 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '360px',
+        'sm': '480px',
+        'md': '640px',
+        'lg': '820px',
+        'xl': '1080px',
+        '2xl': '1280px',
+        '3xl': '1440px',
+        '4xl': '2160px',
+      },
+      container: {
+        center: true,
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#FB1919",
+        secondary: "#14cf93",
+      },
+      fontFamily: {
+        josefin: ['josefin Sans', 'sans-serif'],
+        rancho: ['Rancho', 'cursive']
       },
     },
   },
