@@ -1,14 +1,22 @@
+"use client"
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin, FaPaperPlane } from 'react-icons/fa';
 
 export default function Footer() {
+    const pathname = usePathname()
+    if (pathname.includes('dashboard')) {
+        return null
+    }
     return (
-        <footer className='w-full border-t-2'>
+        <footer className='w-full bg-white border-t-2'>
             <div className='w-4/5 xl:container mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 py-10'>
                 <div className='space-y-2.5'>
-                    <Image src={`/logo-light.png`} alt='Logo' width={250} height={125} />
+                    <Link href={'/'}>
+                        <Image src={`/logo-light.png`} alt='Logo' width={250} height={125} />
+                    </Link>
                     <p className='max-w-xs mx-2.5 text-sm'>
                         We are committed to providing our customers with exceptional service and quality products.
                     </p>
@@ -57,9 +65,9 @@ export default function Footer() {
                         <input
                             type="email"
                             placeholder="Your Email"
-                            className='flex-1 pl-4 py-1.5 rounded-l-sm text-black/75 outline-none md:rounded-l-md'
+                            className='flex-1 pl-4 py-1.5 rounded-l-sm bg-primary-bg outline-none lg:rounded-l'
                         />
-                        <button className='bg-primary/95 min-h-full px-4 py-2.5 rounded-r-sm hover:text-white transition md:rounded-r-md'>
+                        <button className='bg-primary/95 min-h-full px-4 py-2.5 rounded-r hover:text-white transition lg:rounded-r'>
                             <FaPaperPlane />
                         </button>
                     </form>
