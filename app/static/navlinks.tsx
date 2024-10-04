@@ -1,6 +1,7 @@
-import navLinkProp from "../types/navlinkProp"
+import navLinkProps from "../types/navLinkProps";
 
-const navlinks: navLinkProp[] = [
+
+const navigationLinks: navLinkProps[] = [
     {
         title: "Home",
         path: "/"
@@ -21,6 +22,6 @@ const navlinks: navLinkProp[] = [
         title: "Contact",
         path: "/contact"
     },
-]
+];
 
-export default navlinks
+export default navigationLinks;

@@ -5,7 +5,7 @@ type linkBtnProps = {
     path: string
 };
 
-export default function PrimaryBtn({ children, path = "" }: linkBtnProps) {
+export default function PrimaryLinkButton({ children, path = "" }: linkBtnProps) {
     return (
         <Link href={path} className="relative px-8 py-2.5 rounded-[1.25px] overflow-hidden bg-primary font-bold group">
             <span className="absolute bottom-0 left-0 h-full w-full bg-black origin-bottom-right transition-transform duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 group-hover:origin-bottom-left" />

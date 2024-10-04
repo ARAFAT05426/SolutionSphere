@@ -23,7 +23,7 @@ const config: Config = {
       },
       colors: {
         primary: "#FB1919",
-        secondary: "#14cf93",
+        "primary-bg": "#F2F1F1",
       },
       fontFamily: {
         josefin: ['josefin Sans', 'sans-serif'],
