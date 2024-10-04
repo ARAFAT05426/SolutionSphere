@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import NavLink from './NavLink';
 import { useState, useEffect } from 'react';
 import NavToggle from './buttons/NavToggle';
 import navigationLinks from '../static/navlinks';
 import ActionButton from './buttons/ActionButton';
 import Link from 'next/link';
+import NavigationLink from './NavigationLink';
 
 export default function Navbar({ onJoinUsClick }: { onJoinUsClick: () => void }) {
     const [isActive, setIsActive] = useState(false);
@@ -43,7 +43,7 @@ export default function Navbar({ onJoinUsClick }: { onJoinUsClick: () => void })
                     {/* Navigation Links for Larger Screens */}
                     <div className="hidden xl:flex items-center gap-2.5">
                         {navigationLinks.map((navLink, index) => (
-                            <NavLink key={index} path={navLink.path} title={navLink.title} />
+                            <NavigationLink key={index} path={navLink.path} title={navLink.title} />
                         ))}
                     </div>
 
@@ -68,7 +68,7 @@ export default function Navbar({ onJoinUsClick }: { onJoinUsClick: () => void })
             <div className={`fixed inset-0 z-40 flex items-center justify-center xl:hidden transition-all duration-300 ease-in-out ${isActive ? 'opacity-100 visible' : 'opacity-0 invisible'}`} onClick={closeMobileMenu}>
                 <div className={`max-w-xs w-full min-h-96 flex flex-col items-center justify-center gap-2.5 rounded-lg bg-white/25 backdrop-blur-lg transition-all duration-300 ease-in-out transform ${isActive ? 'scale-100 opacity-100' : 'scale-50 opacity-0 invisible'}`} onClick={(e) => e.stopPropagation()}>
                     {navigationLinks.map((navLink, index) => (
-                        <NavLink key={index} path={navLink.path} title={navLink.title} />
+                        <NavigationLink key={index} path={navLink.path} title={navLink.title} />
                     ))}
                 </div>
             </div>

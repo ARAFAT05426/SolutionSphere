@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import navLinkProps from '../types/navLinkProps';
 
 
-export default function NavLink({ title, path }: navLinkProps) {
+export default function NavigationLink({ title, path }: navLinkProps) {
     const currentPath = usePathname();
 
     return (
