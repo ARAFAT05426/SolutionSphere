@@ -1,25 +1,22 @@
-"use client"
-import { usePathname } from 'next/navigation';
+"use client";
 import AuthModal from './modals/Authmodal';
 import Navbar from './Navbar';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
-    const [isAct, setIsAct] = useState(false);
-    const pathname = usePathname()
-    // Function to open the AuthModal
-    const openAuthModal = () => {
-        setIsAct(true);
-    };
+    const pathname = usePathname();
 
-    if (pathname.includes('dashboard')) {
-        return null
+    // Check if the pathname includes 'dashboard' or 'auth'
+    if (pathname.includes('dashboard') || pathname.includes('auth')) {
+        return null; // Don't render the header or AuthModal for these routes
     }
 
     return (
         <>
-            <Navbar onJoinUsClick={openAuthModal} />
-            <AuthModal isOpen={isAct} onClose={() => setIsAct(!isAct)} />
+            <header>
+                <Navbar />
+            </header>
+            <AuthModal />
         </>
     );
 }

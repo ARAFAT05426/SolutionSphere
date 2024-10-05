@@ -1,8 +1,9 @@
-import { Josefin_Sans } from "next/font/google";
-import type { Metadata } from "next";
 import "./globals.css";
+import type { Metadata } from "next";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import { Josefin_Sans } from "next/font/google";
+import AuthProvider from "./contexts/AuthProvider";
 
 const josefin = Josefin_Sans({
   subsets: ['latin'],
@@ -21,15 +22,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${josefin.className} font-medium`}>
-        <header>
+      <AuthProvider>
+        <body className={`${josefin.className} font-medium`} style={{ margin: 0, padding: 0 }}>
           <Header />
-        </header>
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-      </body>
+          <main>
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </AuthProvider>
     </html>
   );
 }

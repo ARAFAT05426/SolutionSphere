@@ -1,14 +1,17 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import NavToggle from './buttons/NavToggle';
-import navigationLinks from '../static/navlinks';
+import navigationLinks from '../static/navigationLinks';
 import ActionButton from './buttons/ActionButton';
 import Link from 'next/link';
 import NavigationLink from './NavigationLink';
+import { useAuth } from '../contexts/AuthProvider';
 
-export default function Navbar({ onJoinUsClick }: { onJoinUsClick: () => void }) {
+export default function Navbar() {
+
+    const { handleAuthModal } = useAuth()
     const [isActive, setIsActive] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false); // State to manage scroll effect
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const toggleMobileMenu = () => setIsActive((prev) => !prev);
 
@@ -56,8 +59,8 @@ export default function Navbar({ onJoinUsClick }: { onJoinUsClick: () => void })
 
                     {/* Call-to-Action Button */}
                     <ActionButton
-                        classname="hidden xl:inline"
-                        onclick={onJoinUsClick}
+                        className="hidden xl:inline"
+                        onClick={() => handleAuthModal(true)}
                     >
                         Join Us
                     </ActionButton>

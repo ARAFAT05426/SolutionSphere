@@ -7,6 +7,7 @@ type PasswordInputProps = {
     id?: string;
     defaultValue?: string;
     className?: string;
+    required?: boolean
 };
 
 function PasswordInput({
@@ -15,6 +16,7 @@ function PasswordInput({
     id,
     defaultValue,
     className = '',
+    required
 }: PasswordInputProps) {
     const [isVisible, setIsVisible] = useState(false);
 
@@ -28,9 +30,10 @@ function PasswordInput({
                 className={`w-full pl-5 pr-10 py-2 border rounded-sm outline-none ${className}`}
                 placeholder={placeholder}
                 type={isVisible ? 'text' : 'password'}
+                defaultValue={defaultValue}
+                required={required}
                 name={name}
                 id={id}
-                defaultValue={defaultValue}
             />
             <button
                 type="button"

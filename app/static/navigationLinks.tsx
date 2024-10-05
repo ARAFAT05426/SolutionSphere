@@ -22,6 +22,10 @@ const navigationLinks: navLinkProps[] = [
         title: "Contact",
         path: "/contact"
     },
+    {
+        title: "Dashboard",
+        path: "/dashboard"
+    },
 ];
 
 export default navigationLinks;
