@@ -12,7 +12,6 @@ export default function Navbar() {
     const { handleAuthModal } = useAuth()
     const [isActive, setIsActive] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-
     const toggleMobileMenu = () => setIsActive((prev) => !prev);
 
     const closeMobileMenu = () => setIsActive(false);

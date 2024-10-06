@@ -9,7 +9,6 @@ type BaseModalProps = {
 
 export default function BaseModal({ isOpen, children, onClose, classname }: BaseModalProps) {
 
-    console.log(isOpen)
     const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget) {
             onClose();

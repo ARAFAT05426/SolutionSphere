@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import connectDB from "@/utilities/connectDB";
 import User from "../../models/user.model";
+import connectDB from "@/utilities/connectDB";
+import { NextRequest, NextResponse } from "next/server";
 import { generateToken } from "@/utilities/generateToken";
 
 dotenv.config();
@@ -14,29 +14,24 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { name, username, email, password } = body;
 
-    // Validate input
     if (!name || !email || !username || !password) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
-    // Check for existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
     const newUser = new User({
       name,
-      username,
       email,
+      username,
       password: hashedPassword,
     });
 
-    // Save the new user
     try {
       await newUser.save();
     } catch (saveError) {
@@ -44,15 +39,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to create user in the database' }, { status: 500 });
     }
 
-    // Generate a token
     const token = generateToken({ email });
 
-    // Create the response
-    const response = NextResponse.json({ message: 'User created successfully' }, { status: 201 });
+    const response = NextResponse.json({ message: 'User created successfully', user: { name: newUser.name, username: newUser.username, email: newUser.email } }, { status: 201 });
     response.cookies.set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 7 * 24 * 60 * 60, // 1 week
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
     });
 

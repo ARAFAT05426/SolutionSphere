@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 export async function POST() {
   try {
     const response = NextResponse.json({ message: "Logout successful" });
-
-    // Example: Clearing a cookie
     response.cookies.set("token", "", { httpOnly: true, path: "/", expires: new Date(0) });
 
     return response;

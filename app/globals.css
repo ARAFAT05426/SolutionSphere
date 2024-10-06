@@ -13,5 +13,23 @@ html {
 }
 
 body {
-  background-color: rgba(238, 237, 237, 0.75);
+  background-color: rgba(238, 237, 237, 0.5);
 }
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #67676780;
+  border-radius: 2.5px;
+}
+
+/* ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #00b4d8, #14cf93);
+} */

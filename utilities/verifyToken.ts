@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
-export const verifyToken = (token: string): object => {
+type TokenPayload = {
+    email: string;
+};
+
+export const verifyToken = (token: string): TokenPayload => {
     const secret = process.env.JWT_SECRET;
-    
+
     if (!secret) {
         console.error("JWT_SECRET is not defined in the environment variables.");
         throw new Error("env error: JWT_SECRET is missing");
@@ -15,8 +18,8 @@ export const verifyToken = (token: string): object => {
     }
 
     try {
-        const decoded = jwt.verify(token, secret) as object;
-        return decoded;
+        const decoded = jwt.verify(token, secret) as TokenPayload;
+        return { email: decoded?.email };
     } catch (error) {
         console.error("Error verifying token:", error);
         throw new Error("Invalid token.");

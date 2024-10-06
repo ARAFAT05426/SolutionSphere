@@ -1,13 +1,13 @@
 "use client"
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin, FaPaperPlane } from 'react-icons/fa';
 
 export default function Footer() {
     const pathname = usePathname()
-    if (pathname.includes('dashboard')) {
+    if (pathname.includes('dashboard') || pathname.includes('auth')) {
         return null
     }
     return (
@@ -65,9 +65,9 @@ export default function Footer() {
                         <input
                             type="email"
                             placeholder="Your Email"
-                            className='flex-1 pl-4 py-1.5 rounded-l-sm bg-primary-bg outline-none lg:rounded-l'
+                            className='flex-1 pl-4 py-1.5 rounded-l-sm bg-primary-bg outline-none'
                         />
-                        <button className='bg-primary/95 min-h-full px-4 py-2.5 rounded-r hover:text-white transition lg:rounded-r'>
+                        <button className='bg-primary/95 min-h-full px-4 py-2.5 rounded-r-sm hover:text-white transition'>
                             <FaPaperPlane />
                         </button>
                     </form>

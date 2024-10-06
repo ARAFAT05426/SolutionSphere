@@ -1,5 +1,6 @@
 "use client";
 import axiosCommon from '@/utilities/axiosCommon';
+import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type AuthContextType = {
@@ -15,27 +16,10 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const router = useRouter()
   const [user, setUser] = useState<object | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data } = await axiosCommon.get("/session");
-        setUser(data.user || null);
-
-        // Open modal if the user does not exist
-      } catch (error) {
-        console.error("Error checking authentication:", error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []); // Run once on mount
 
   const handleAuthModal = (isOpen: boolean) => {
     setIsAuthModalOpen(isOpen);
@@ -44,20 +28,20 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const login = async (credentials: { email: string; password: string }) => {
     try {
       const { data } = await axiosCommon.post("/login", credentials);
-      setUser(data.user);
-      setIsAuthModalOpen(false); // Close modal on successful login
+      setUser(data?.user);
+      setIsAuthModalOpen(false);
     } catch (error) {
-      throw new Error("Login failed: " + (error instanceof Error ? error.message : "An error occurred."));
+      console.error("Login failed:", error);
     }
   };
 
   const signup = async (credentials: { name: string; username: string; email: string; password: string }) => {
     try {
       const { data } = await axiosCommon.post("/register", credentials);
-      setUser(data.user);
-      setIsAuthModalOpen(false); // Close modal on successful signup
+      setUser(data?.user);
+      setIsAuthModalOpen(false);
     } catch (error) {
-      throw new Error("Signup failed: " + (error instanceof Error ? error.message : "An error occurred."));
+      console.error("Signup failed:", error);
     }
   };
 
@@ -65,11 +49,27 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     try {
       await axiosCommon.post("/logout");
       setUser(null);
-      setIsAuthModalOpen(true); // Optionally reopen modal on logout
+      setIsAuthModalOpen(true); 
+      router.push('/auth');
     } catch (error) {
-      throw new Error("Logout failed: " + (error instanceof Error ? error.message : "An error occurred."));
+      console.error("Logout failed:", error);
     }
   };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data } = await axiosCommon.get("/session");
+        setUser(data?.userData);
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   const value: AuthContextType = {
     user,
