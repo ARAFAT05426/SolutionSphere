@@ -24,9 +24,9 @@ const BaseTable: React.FC<BaseTableProps> = ({
     columns = [],
 }) => {
     return (
-        <div className={`relative ${className} bg-white pt-5 rounded-sm border shadow-sm`}>
+        <div className={`relative ${className} bg-white pt-2.5 rounded-sm border shadow-sm`}>
             {topHeading}
-            <div className="overflow-x-auto p-5">
+            <div className="overflow-x-auto py-2.5 px-5">
                 <table className="min-w-full overflow-x-auto border border-collapse">
                     <thead className="bg-primary-bg/75">
                         <tr className="rounded-md">

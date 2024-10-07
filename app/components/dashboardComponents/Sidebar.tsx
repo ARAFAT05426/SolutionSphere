@@ -1,32 +1,37 @@
 "use client";
+import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import SidebarLink from './SidebarLink';
 import NavToggle from '../buttons/NavToggle';
 import { MdOutlineLogout } from 'react-icons/md';
 import dashboardLinks from '@/app/static/dashboardLinks';
-import PrimaryLinkButton from '../buttons/PrimaryLinkButton ';
-import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthProvider';
-
+import PrimaryLinkButton from '../buttons/PrimaryLinkButton ';
 export default function Sidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const { logout } = useAuth()
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const { logout } = useAuth();
 
   return (
     <>
       {/* NavToggle Button for Mobile */}
-      <NavToggle
-        classname='fixed top-1.5 left-1.5 z-50 block xl:hidden'
-        isActive={isSidebarOpen}
-        toggleActive={setIsSidebarOpen}
-      />
+      <div className='fixed inset-x-0 top-0 bg-black/25 backdrop-blur-md flex xl:hidden items-center justify-between p-2.5 z-40'>
+        <Link href={'/'}>
+          <Image src={`/logo-icon.png`} alt='logo icon' width={50} height={25} />
+        </Link>
+        <NavToggle
+          classname='block xl:hidden'
+          isActive={isSidebarOpen}
+          toggleActive={setIsSidebarOpen}
+          aria-label="Toggle sidebar"
+        />
+      </div>
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen w-48 xs:w-52 sm:w-56 md:w-60 lg:w-64 xl:w-72 py-10 flex flex-col justify-between bg-white/25 backdrop-blur-xl shadow-lg z-40 transition-all duration-500 transform
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}`}
+        className={`fixed top-0 left-0 h-screen w-48 xs:w-52 sm:w-56 md:w-60 lg:w-64 py-10 flex flex-col justify-between bg-white/25 backdrop-blur-xl shadow-lg z-40 transition-transform duration-500 transform 
+          ${isSidebarOpen ? 'translate-x-0 opacity-100' : '-translate-x-full xl:translate-x-0 opacity-0 xl:opacity-100'}`}
+        style={{ transition: 'transform 500ms ease-in-out, opacity 500ms ease-in-out' }}
       >
         {/* Logo Section */}
         <Link href={'/'}>
@@ -41,6 +46,7 @@ export default function Sidebar() {
               title={dashboardLink.title}
               path={dashboardLink.path}
               Icon={dashboardLink.Icon}
+              aria-label={dashboardLink.title}
             />
           ))}
         </div>
@@ -60,7 +66,11 @@ export default function Sidebar() {
           </div>
 
           {/* Logout Button */}
-          <button onClick={logout} className='p-3.5 rounded-full text-black bg-gray-200 hover:bg-gray-300'>
+          <button
+            onClick={logout}
+            className='p-3.5 rounded-full text-black bg-gray-200 hover:bg-gray-300'
+            aria-label="Logout"
+          >
             <MdOutlineLogout size={20} />
           </button>
         </div>

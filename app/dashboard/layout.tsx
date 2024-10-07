@@ -2,16 +2,17 @@ import React from 'react';
 import Sidebar from '../components/dashboardComponents/Sidebar';
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-    return (
-        <>
+  return (
+    <>
+      <>
+        {/* Sidebar */}
+        <Sidebar />
 
-            <div className="flex flex-col flex-1 w-full">
-                <Sidebar />
-                {/* Page Content */}
-                <div className="">
-                    {children}
-                </div>
-            </div>
-        </>
-    );
+        {/* Page Content */}
+        <div className="ml-60 px-10 py-5">
+          {children}
+        </div>
+      </>
+    </>
+  );
 }

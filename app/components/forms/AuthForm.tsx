@@ -41,6 +41,7 @@ export default function AuthForm() {
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
         const email = (e.currentTarget.elements.namedItem("email") as HTMLInputElement).value;
         const password = (e.currentTarget.elements.namedItem("password") as HTMLInputElement).value;
 
@@ -51,6 +52,8 @@ export default function AuthForm() {
         } catch (error) {
             console.error("Login Error:", error);
             setError("Login failed. Please check your email and password.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -77,8 +80,8 @@ export default function AuthForm() {
                     <form className="space-y-2.5 mb-2.5" onSubmit={handleLogin}>
                         <TextInput name="email" placeholder="Email *" required />
                         <PasswordInput name="password" placeholder="Password *" required />
-                        <ActionButton type="submit" className="w-full">
-                            Login
+                        <ActionButton type="submit" className="w-full" disabled={loading}>
+                            {loading ? "Logging in..." : "Login"}
                         </ActionButton>
                     </form>
                     <span className="text-center mt-2.5 text-xs">

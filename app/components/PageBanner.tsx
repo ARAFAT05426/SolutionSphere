@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 type PageBannerProps = {
@@ -15,7 +16,7 @@ export default function PageBanner({ title = "", sub_title = "" }: PageBannerPro
     >
       <div className="text-center text-white z-10">
         <h1 className="text-7xl font-bold">{title}</h1>
-        <h3 className="text-xl mt-4">Home {">" + " " + sub_title}</h3>
+        <h3 className="text-xl mt-4"><Link href={"/"} className='text-primary'>Home</Link> {">" + " " + sub_title}</h3>
       </div>
 
       {/* Optional: If you want a solid overlay for more emphasis */}

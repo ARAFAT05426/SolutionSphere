@@ -6,22 +6,25 @@ type TokenPayload = {
     email: string;
 };
 
-export const verifyToken = (token: string): TokenPayload => {
-    const secret = process.env.JWT_SECRET;
+export function verifyToken(token: string): Promise<TokenPayload> {
+    return new Promise((resolve, reject) => {
+        const secret = process.env.JWT_SECRET;
 
-    if (!secret) {
-        console.error("JWT_SECRET is not defined in the environment variables.");
-        throw new Error("env error: JWT_SECRET is missing");
-    }
-    if (!token) {
-        throw new Error("Token is required for verification.");
-    }
+        if (!secret) {
+            console.error("JWT_SECRET is not defined in the environment variables.");
+            return reject(new Error("env error: JWT_SECRET is missing"));
+        }
 
-    try {
-        const decoded = jwt.verify(token, secret) as TokenPayload;
-        return { email: decoded?.email };
-    } catch (error) {
-        console.error("Error verifying token:", error);
-        throw new Error("Invalid token.");
-    }
-};
+        if (!token) {
+            return reject(new Error("Token is required for verification."));
+        }
+
+        try {
+            const decoded = jwt.verify(token, secret) as TokenPayload;
+            resolve({ email: decoded?.email });
+        } catch (error) {
+            console.error("Error verifying token:", error);
+            reject(new Error("Invalid token."));
+        }
+    });
+}

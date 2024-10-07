@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import User from '../../models/user.model';
-import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+import User from '../../models/user.model';
 import connectDB from "@/utilities/connectDB";
+import { NextRequest, NextResponse } from "next/server";
 import { generateToken } from "@/utilities/generateToken";
 
 dotenv.config();
 
 export async function POST(req: NextRequest) {
-    await connectDB();
 
     try {
+        await connectDB();
         const body = await req.json();
         const { email, password } = body;
 
@@ -23,12 +23,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'User does not exist' }, { status: 404 });
         }
 
-    
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
         }
-    
+
         const token = generateToken({ email: user.email });
 
         const response = NextResponse.json({ message: 'Login successful', user: { email: user.email } }, { status: 200 });

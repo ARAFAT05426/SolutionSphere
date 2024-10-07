@@ -17,7 +17,7 @@ const dashboardLinks: dashboardLinkProps[] = [
   },
   {
     title: "My Listings",
-    path: "/listings",
+    path: "/dashboard/my-services",
     Icon: CiShop
   },
   {
