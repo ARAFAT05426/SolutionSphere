@@ -1,25 +1,25 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 type TService = Document & {
-    status: boolean;
+    status: string;
     title: string;
     description: string;
     category: 'Beauty' | 'Home Repair' | 'Cleaning' | 'Plumbing' | 'Electrical' | 'Gardening' | 'Other';
     provider: mongoose.Types.ObjectId;
-    location: string;
     price: number;
     duration: number;
     availability: boolean;
-    images: string[];
+    image: string; // Ensure this is a single image, change if you need an array
     createdAt: Date;
     updatedAt: Date;
 };
 
 const serviceSchema: Schema<TService> = new Schema({
     status: {
-        type: Boolean,
+        type: String,
         required: true,
-        default: true,
+        default: "active",
+        enum: ["active", "blocked"]
     },
     title: {
         type: String,
@@ -39,10 +39,6 @@ const serviceSchema: Schema<TService> = new Schema({
         ref: 'Provider',
         required: true,
     },
-    location: {
-        type: String,
-        required: true,
-    },
     price: {
         type: Number,
         required: true,
@@ -57,9 +53,10 @@ const serviceSchema: Schema<TService> = new Schema({
         required: true,
         default: true,
     },
-    images: [{
-        type: String,
-    }],
+    image: {
+        type: String, // or an array if you need multiple images
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
@@ -70,13 +67,12 @@ const serviceSchema: Schema<TService> = new Schema({
     }
 });
 
-// Middleware to update `updatedAt` field before saving
+// Update the updatedAt field before saving
 serviceSchema.pre<TService>('save', function (next) {
     this.updatedAt = new Date();
     next();
 });
 
-// Create the Service model, checking if it already exists
 const Service = mongoose.models.Service || mongoose.model<TService>('Service', serviceSchema);
 
 export default Service;

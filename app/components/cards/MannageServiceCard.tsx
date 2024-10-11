@@ -1,55 +1,58 @@
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { CiEdit, CiMenuKebab } from "react-icons/ci";
-import BaseCard from "./BaseCard";
-import Image from 'next/image';
 import { RiDeleteBin6Line } from "react-icons/ri";
+import BaseCard from "./BaseCard";
+import serviceProps from "@/app/types/serviceProps";
 
 type ManageServiceCardProps = {
-  service: {
-    title: string;
-    description: string;
-    category: 'Beauty' | 'Home Repair' | 'Cleaning' | 'Plumbing' | 'Electrical' | 'Gardening' | 'Other';
-    price: number;
-    images: string[];
-  };
+  service: serviceProps;
+  onEditService: (service: serviceProps) => void;
 };
 
-const ManageServiceCard = ({ service }: ManageServiceCardProps) => {
-  const { title, description, category, price, images } = service;
-  const [isMenuVisible, setMenuVisible] = useState(false);
+const ManageServiceCard = ({ service, onEditService }: ManageServiceCardProps) => {
+  const { title, description, category, price, image } = service;
+
+  // State to manage visibility of the dropdown menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // References for menu-related interactions
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  // Toggle the menu visibility
   const handleMenuToggle = () => {
-    setMenuVisible((prev) => !prev);
+    setIsMenuOpen((prev) => !prev);
   };
 
+  // Close the menu
   const handleMenuClose = () => {
-    setMenuVisible(false);
+    setIsMenuOpen(false);
+  };
+
+  // Prevent blur on menu interaction
+  const preventBlur = (e: React.MouseEvent) => {
+    e.preventDefault();
   };
 
   return (
     <BaseCard className="bg-white p-4 rounded border shadow hover:shadow-md transition-all duration-300 ease-in-out">
       {/* Service Image */}
       <div className="relative h-52 w-full mb-3 rounded overflow-hidden">
-        {images.length > 0 ? (
-          <Image
-            src={images[0]}
-            alt={`${title} image`}
-            className="object-cover"
-            fill
-          />
-        ) : (
-          <div className="bg-gray-200 w-full h-full flex items-center justify-center">
-            <p className="text-gray-500">No Image</p>
-          </div>
-        )}
+        <Image
+          src={image}
+          alt={`${title} image`}
+          className="object-cover"
+          fill
+        />
       </div>
 
       {/* Service Title and Dropdown Menu */}
       <div className="relative flex items-center justify-between">
-        <h2 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-all duration-300">
+        <h2 className="text-lg font-bold text-gray-900 transition-all duration-300 group-hover:text-primary">
           {title}
         </h2>
+
+        {/* Menu Button */}
         <button
           onClick={handleMenuToggle}
           onBlur={handleMenuClose}
@@ -60,16 +63,22 @@ const ManageServiceCard = ({ service }: ManageServiceCardProps) => {
         </button>
 
         {/* Dropdown Menu */}
-        {isMenuVisible && (
+        {isMenuOpen && (
           <div
             ref={menuRef}
-            tabIndex={-1}
             className="absolute top-2.5 right-5 w-24 bg-white shadow border rounded-sm text-sm z-10"
           >
-            <button className="w-full flex items-center gap-1 px-3 py-2 hover:bg-gray-100 transition-all duration-300">
+            <button
+              onMouseDown={preventBlur}
+              onClick={() => onEditService(service)}
+              className="w-full flex items-center gap-1 px-3 py-2 hover:bg-gray-100 transition-all duration-300"
+            >
               <CiEdit /> Edit
             </button>
-            <button className="w-full flex items-center gap-1 px-3 py-2 text-red-600 hover:bg-gray-100 transition-all duration-300">
+            <button
+              onMouseDown={preventBlur}
+              className="w-full flex items-center gap-1 px-3 py-2 text-red-600 hover:bg-gray-100 transition-all duration-300"
+            >
               <RiDeleteBin6Line /> Delete
             </button>
           </div>
@@ -77,7 +86,7 @@ const ManageServiceCard = ({ service }: ManageServiceCardProps) => {
       </div>
 
       {/* Category and Description */}
-      <span className="text-sm font-semibold text-gray-600 my-1 opacity-75 block">
+      <span className="text-sm font-semibold text-gray-600 opacity-75 block mt-2">
         Category: {category}
       </span>
       <p className="text-xs text-gray-600 opacity-75">{description.slice(0, 100)}...</p>

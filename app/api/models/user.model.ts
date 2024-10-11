@@ -2,8 +2,8 @@ import mongoose, { Document, Schema } from "mongoose";
 
 type IUser = Document & {
   name: string;
-  username: string;
   email: string;
+  username: string;
   password: string;
 };
 

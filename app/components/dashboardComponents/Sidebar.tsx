@@ -3,11 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import SidebarLink from './SidebarLink';
+import { CiPower } from 'react-icons/ci';
 import NavToggle from '../buttons/NavToggle';
-import { MdOutlineLogout } from 'react-icons/md';
-import dashboardLinks from '@/app/static/dashboardLinks';
 import { useAuth } from '@/app/contexts/AuthProvider';
+import dashboardLinks from '@/app/static/dashboardLinks';
 import PrimaryLinkButton from '../buttons/PrimaryLinkButton ';
+
 export default function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const { logout } = useAuth();
@@ -71,7 +72,7 @@ export default function Sidebar() {
             className='p-3.5 rounded-full text-black bg-gray-200 hover:bg-gray-300'
             aria-label="Logout"
           >
-            <MdOutlineLogout size={20} />
+            <CiPower size={20} />
           </button>
         </div>
       </aside>

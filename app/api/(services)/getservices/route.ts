@@ -1,18 +1,46 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/utilities/connectDB';
 import Service from '../../models/service.model';
 
-export async function GET(request: Request) {
+interface Query {
+    $or?: ({ title: { $regex: string; $options: string; }; description?: undefined; } | { description: { $regex: string; $options: string; }; title?: undefined; })[];
+    status?: string;
+    category?: string;
+    location?: string;
+    price?: number;
+    availability?: boolean;
+}
+
+export async function GET(request: NextRequest) {
+    console.log('Connecting to DB...');
     await connectDB();
+    console.log('Connected to DB');
+
     const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '10');
+    const page = Math.max(parseInt(url.searchParams.get('page') || '1'), 1);
+    const limit = Math.max(parseInt(url.searchParams.get('limit') || '10'), 1);
+    const status = url.searchParams.get('status');
+    const search = url.searchParams.get('search'); // New search parameter
     const skip = (page - 1) * limit;
 
     try {
-        const totalServices = await Service.countDocuments({});
-        const services = await Service.find({}).skip(skip).limit(limit);
-        
+        const query: Query = {};
+
+        if (status && status !== "all") {
+            query.status = status;
+        }
+
+        // Search by title or description
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const totalServices = await Service.countDocuments(query);
+        const services = await Service.find(query).skip(skip).limit(limit);
+
         return NextResponse.json({
             totalServices,
             services,
@@ -20,11 +48,8 @@ export async function GET(request: Request) {
             totalPages: Math.ceil(totalServices / limit)
         });
     } catch (error) {
-        console.log(error);
-        if (error instanceof Error) {
-            return NextResponse.json({ error: error.message }, { status: 500 });
-        }
-
+        console.error('Error:', error);
         return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 });
     }
 }
+

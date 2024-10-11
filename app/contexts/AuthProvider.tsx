@@ -2,9 +2,10 @@
 import axiosCommon from '@/utilities/axiosCommon';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import userProps from '../types/userProps';
 
 type AuthContextType = {
-  user: object | null;
+  user: userProps | null;
   loading: boolean;
   isAuthModalOpen: boolean;
   logout: () => Promise<void>;
@@ -17,7 +18,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter()
-  const [user, setUser] = useState<object | null>(null);
+  const [user, setUser] = useState<userProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
@@ -49,8 +50,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     try {
       await axiosCommon.post("/logout");
       setUser(null);
-      setIsAuthModalOpen(true); 
-      router.push('/auth');
+      setIsAuthModalOpen(true);
+      router.push('/');
     } catch (error) {
       console.error("Logout failed:", error);
     }

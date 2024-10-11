@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Josefin_Sans } from "next/font/google";
 import AuthProvider from "./contexts/AuthProvider";
+import AuthModal from "./components/modals/Authmodal";
 
 const josefin = Josefin_Sans({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <AuthModal />
         </body>
       </AuthProvider>
     </html>
