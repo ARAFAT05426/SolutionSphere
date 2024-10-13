@@ -1,4 +1,4 @@
-import { CiGrid31, CiShop } from "react-icons/ci";
+import { CiGrid31, CiShop, CiWarning } from "react-icons/ci";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import { RiShieldUserLine } from "react-icons/ri";
 import { SlHandbag } from "react-icons/sl";
@@ -12,7 +12,7 @@ const dashboardLinks: dashboardLinkProps[] = [
   },
   {
     title: "Members",
-    path: "/users",
+    path: "/dashboard/members",
     Icon: LiaClipboardListSolid
   },
   {
@@ -24,6 +24,11 @@ const dashboardLinks: dashboardLinkProps[] = [
     title: "My Orders",
     path: "/orders",
     Icon: SlHandbag
+  },
+  {
+    title: "Reports",
+    path: "/CiWarning",
+    Icon: CiWarning
   },
   {
     title: "Profile",

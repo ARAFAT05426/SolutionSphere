@@ -5,6 +5,8 @@ type IUser = Document & {
   email: string;
   username: string;
   password: string;
+  role: string;
+  status: string;
 };
 
 // Define the user schema
@@ -28,6 +30,16 @@ const userSchema: Schema<IUser> = new Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    required: true,
+    default: "user"
+  },
+  status: {
+    type: String,
+    required: true,
+    default: "active"
+  }
 });
 
 // Check if the User model is already defined

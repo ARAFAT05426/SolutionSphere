@@ -2,25 +2,29 @@ import { FiPlus, FiSearch } from "react-icons/fi";
 import { CiUndo } from "react-icons/ci";
 import SelectInput from "../inputFields/SelectInput";
 
-interface ManageServiceControlsProps {
-  searchTerm: string;
-  onReset: () => void;
-  selectedFilterStatus: string;
-  onSearch: () => void;
-  onAddService: () => void;
+interface MannagementControlsProps {
+  onAdd?: () => void;
+  searchTerm?: string;
+  onReset?: () => void;
+  onSearch?: () => void;
+  placeholder?: string;
+  selectedFilterStatus?: string;
   onSearchTermChange: (term: string) => void;
   onFilterStatusChange: (status: string) => void;
+  filterOptions: { label: string; value: string }[];
 }
 
-export default function ManageServiceControls({
-  searchTerm,
+export default function MannageMentControls({
+  onAdd,
   onReset,
-  selectedFilterStatus,
   onSearch,
-  onAddService,
+  searchTerm,
+  filterOptions,
   onSearchTermChange,
   onFilterStatusChange,
-}: ManageServiceControlsProps) {
+  selectedFilterStatus,
+  placeholder = "Search",
+}: MannagementControlsProps) {
   return (
     <div className="flex items-center gap-2.5">
       {/* Search Input */}
@@ -28,7 +32,7 @@ export default function ManageServiceControls({
         <input
           type="text"
           className="h-full min-h-10 max-h-10 pl-4 pr-10 py-2 rounded-sm outline-none"
-          placeholder="Search"
+          placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => onSearchTermChange(e.target.value)}
           aria-label="Search input"
@@ -36,7 +40,7 @@ export default function ManageServiceControls({
         <button
           className="border bg-primary-bg h-full min-h-10 max-h-10 px-2.5 hover:bg-primary hover:text-white transition-all duration-300"
           onClick={onSearch}
-          aria-label="Search services"
+          aria-label="Search"
         >
           <FiSearch />
         </button>
@@ -46,11 +50,7 @@ export default function ManageServiceControls({
       <SelectInput
         placeholder="Filter By Status"
         selectedValue={selectedFilterStatus}
-        options={[
-          { label: "All", value: "all" },
-          { label: "Active", value: "active" },
-          { label: "Blocked", value: "blocked" },
-        ]}
+        options={filterOptions}
         onChange={(value) => value && onFilterStatusChange(value)}
       />
 
@@ -63,11 +63,11 @@ export default function ManageServiceControls({
         <CiUndo strokeWidth={1} />
       </button>
 
-      {/* Add Service Button */}
+      {/* Add Button */}
       <button
         className="px-3 h-full min-h-10 max-h-10 rounded-sm bg-primary text-white"
-        onClick={onAddService}
-        aria-label="Add new service"
+        onClick={onAdd}
+        aria-label="Add new item"
       >
         <FiPlus />
       </button>

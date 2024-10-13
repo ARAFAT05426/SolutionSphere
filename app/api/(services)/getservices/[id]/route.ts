@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    console.log(params)
+  console.log(params)
   return NextResponse.json({ message: 'Service retrieved successfully' });
 }

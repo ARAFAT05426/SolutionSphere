@@ -3,9 +3,8 @@ import connectDB from '@/utilities/connectDB';
 import Service from '../../models/service.model';
 
 interface Query {
-    $or?: ({ title: { $regex: string; $options: string; }; description?: undefined; } | { description: { $regex: string; $options: string; }; title?: undefined; })[];
+    $or?: Array<{ title?: { $regex: string; $options: string; }; description?: { $regex: string; $options: string; }; category?: { $regex: string; $options: string; }; }>;
     status?: string;
-    category?: string;
     location?: string;
     price?: number;
     availability?: boolean;
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest) {
     const page = Math.max(parseInt(url.searchParams.get('page') || '1'), 1);
     const limit = Math.max(parseInt(url.searchParams.get('limit') || '10'), 1);
     const status = url.searchParams.get('status');
-    const search = url.searchParams.get('search'); // New search parameter
+    const search = url.searchParams.get('search');
     const skip = (page - 1) * limit;
 
     try {
@@ -30,11 +29,11 @@ export async function GET(request: NextRequest) {
             query.status = status;
         }
 
-        // Search by title or description
         if (search) {
             query.$or = [
                 { title: { $regex: search, $options: 'i' } },
-                { description: { $regex: search, $options: 'i' } }
+                { description: { $regex: search, $options: 'i' } },
+                { category: { $regex: search, $options: 'i' } }
             ];
         }
 
@@ -52,4 +51,3 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 });
     }
 }
-

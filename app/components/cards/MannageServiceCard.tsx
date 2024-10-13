@@ -8,9 +8,10 @@ import serviceProps from "@/app/types/serviceProps";
 type ManageServiceCardProps = {
   service: serviceProps;
   onEditService: (service: serviceProps) => void;
+  onDeleteService: (serviceProps: serviceProps) => void;
 };
 
-const ManageServiceCard = ({ service, onEditService }: ManageServiceCardProps) => {
+const ManageServiceCard = ({ service, onEditService, onDeleteService }: ManageServiceCardProps) => {
   const { title, description, category, price, image } = service;
 
   // State to manage visibility of the dropdown menu
@@ -77,6 +78,7 @@ const ManageServiceCard = ({ service, onEditService }: ManageServiceCardProps) =
             </button>
             <button
               onMouseDown={preventBlur}
+              onClick={() =>onDeleteService(service)}
               className="w-full flex items-center gap-1 px-3 py-2 text-red-600 hover:bg-gray-100 transition-all duration-300"
             >
               <RiDeleteBin6Line /> Delete
@@ -89,10 +91,10 @@ const ManageServiceCard = ({ service, onEditService }: ManageServiceCardProps) =
       <span className="text-sm font-semibold text-gray-600 opacity-75 block mt-2">
         Category: {category}
       </span>
-      <p className="text-xs text-gray-600 opacity-75">{description.slice(0, 100)}...</p>
+      <p className="text-xs text-gray-600 opacity-75">{description?.slice(0, 100)}...</p>
 
       {/* Price */}
-      <p className="font-bold text-primary mt-3">Price: ${price.toFixed(2)}</p>
+      <p className="font-bold text-primary mt-3">Price: ${price?.toFixed(2)}</p>
     </BaseCard>
   );
 };

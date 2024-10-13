@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react";
 import axiosCommon from "@/utilities/axiosCommon";
 import AddServiceModal from "../modals/AddService";
-import UpdateServiceModal from "../modals/UpdateServiceModal";
-import PaginationButtons from "../buttons/PaginationButtons";
 import serviceProps from "@/app/types/serviceProps";
+import ConfirmDelete from "../modals/ConfirmDelete";
 import ManageServiceCard from "../cards/MannageServiceCard";
-import ManageServiceControls from "./MannageServiceControls";
+import PaginationButtons from "../buttons/PaginationButtons";
+import UpdateServiceModal from "../modals/UpdateServiceModal";
+import MannageMentControls from "./MannageMentControls";
 
 export default function ManageServices() {
   const [services, setServices] = useState<serviceProps[]>([]);
@@ -21,6 +22,7 @@ export default function ManageServices() {
   // Modal and selected service state
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const [isUpdateServiceOpen, setIsUpdateServiceOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<serviceProps | null>(null);
 
   const itemsPerPage = 8;
@@ -62,6 +64,23 @@ export default function ManageServices() {
     setSelectedService(service);
   };
 
+  const handleDeleteService = async () => {
+    try {
+      if (!selectedService) return;
+
+      await axiosCommon.delete(`/deleteservice`, {
+        data: { _id: selectedService._id }
+      });
+
+      setServices((prev) => prev.filter((s) => s._id !== selectedService._id));
+      setIsDeleteModalOpen(false);
+      setSelectedService(null);
+
+    } catch (error) {
+      console.error("Error deleting service:", error);
+    }
+  };
+
   const renderServiceStats = () => (
     <div className="my-2.5 mx-0.5 flex items-center gap-5">
       <StatCard label="Services Listed" value="41" />
@@ -77,6 +96,10 @@ export default function ManageServices() {
           key={i}
           service={service}
           onEditService={handleEditService}
+          onDeleteService={() => {
+            setIsDeleteModalOpen(true);
+            setSelectedService(service);
+          }}
         />
       ))
     ) : (
@@ -90,14 +113,19 @@ export default function ManageServices() {
     <>
       <div className="flex items-center justify-between">
         {renderServiceStats()}
-        <ManageServiceControls
+        <MannageMentControls
           onReset={handleReset}
           searchTerm={searchTerm}
           onSearch={handleSearch}
           selectedFilterStatus={filterStatus}
-          onAddService={() => setIsAddServiceOpen(true)}
+          onAdd={() => setIsAddServiceOpen(true)}
           onSearchTermChange={setSearchTerm}
           onFilterStatusChange={setFilterStatus}
+          filterOptions={[
+            { label: "All", value: "all" },
+            { label: "Active", value: "active" },
+            { label: "Blocked", value: "blocked" },
+          ]}
         />
       </div>
 
@@ -124,6 +152,12 @@ export default function ManageServices() {
           setSelectedService(null);
         }}
         service={selectedService}
+      />
+      <ConfirmDelete
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteService}
+        message={`Are you sure you want to delete the service "${selectedService?.title}"?`}
       />
     </>
   );
